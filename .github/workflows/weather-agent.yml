@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
-steps:
+    steps:
       - name: Check out repo
         uses: actions/checkout@v4
 
@@ -18,11 +18,17 @@ steps:
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-          
-- name: Install dependencies
+
+      - name: Install dependencies
         run: pip install -r requirements.txt
 
       - name: Run weather script
         run: python weather.py
 
-git add historical_weather.csv forecast_weather.csv
+      - name: Commit updated data
+        run: |
+          git config user.name "Weather Agent"
+          git config user.email "actions@github.com"
+          git add historical_weather.csv forecast_weather.csv
+          git commit -m "Update weather data $(date +'%Y-%m-%d')" || echo "No changes to commit"
+          git push
