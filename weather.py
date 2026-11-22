@@ -1,5 +1,6 @@
 import requests
 import pandas as pd
+import os
 from datetime import date
 # My camping location
 LATITUDE = 37.8651
@@ -93,6 +94,8 @@ def get_current_weather(lat, lon):
     }
     response = requests.get(url, params=params)
     return response.json()
+
+log_df.to_csv(log_file, mode="a", header=not os.path.exists(log_file), index=False)
 current_data = get_current_weather(LATITUDE, LONGITUDE)
 current_temp = current_data["current"]["temperature_2m"]
 current_time = current_data["current"]["time"]
